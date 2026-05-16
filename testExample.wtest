@@ -1,0 +1,71 @@
+import example.*
+
+describe "Test 2do Parcial" {
+  const tecnologia1 = new Tecnologia(nombre="cámara de fusión energética",valorEnergetico=10,estaActiva=true)
+  const tecnologia2 = new Tecnologia(nombre="interfaz de proyección mental",valorEnergetico=20,estaActiva=true)
+  const tecnologia3 = new Tecnologia(nombre="núcleo gravitacional",valorEnergetico=5,estaActiva=false)
+  const tecnologia4 = new Tecnologia(nombre="núcleo gravitacional",valorEnergetico=10,estaActiva=true)
+  const tecnologia5 = new Tecnologia(nombre="cámara de fusión energética",valorEnergetico=20,estaActiva=false)
+
+  const entrenador2 = new Entrenador(cantCiclosSolares=5,estaEnSintoniaConElEquipo=true,nivelPrecisionEstrategica=60,rol=estrategaCuantico)
+  const equipo1 = new Luminico(nombre="equipoLuminico",nivelDeEnergiaBase=100,nivelRadacionCapturada=6000,entrenador=entrenador2)
+  const equipo2 = new Luminico(nombre="equipoLuminico2",nivelDeEnergiaBase=100,nivelRadacionCapturada=3000,entrenador=entrenador2)
+  const equipo3 = new Sintetico(nombre="equipoSintetico",nivelDeEnergiaBase=100,entrenador=entrenador2,nivelProcesamientoCentral=5,cantModulosActivos=6,estaCertificadoComoEstable=true)
+  const equipo4 = new Luminico(nombre="equipoLuminico2",nivelDeEnergiaBase=100,nivelRadacionCapturada=3000,entrenador=entrenador5,cristalesSolares=["cristal1","cristal2","cristal3"],tecnologiasComplementarias=[tecnologia1,tecnologia3])
+  const equipo5 = new Sintetico(nombre="equipoSintetico3",nivelDeEnergiaBase=100,entrenador=entrenador2,nivelProcesamientoCentral=5,cantModulosActivos=4,estaCertificadoComoEstable=true,tecnologiasComplementarias=[tecnologia2,tecnologia4])
+  const equipo6 = new Sintetico(nombre="equipoSintetico3",nivelDeEnergiaBase=100,entrenador=entrenador2,nivelProcesamientoCentral=5,cantModulosActivos=4,estaCertificadoComoEstable=true,tecnologiasComplementarias=[tecnologia2,tecnologia3])
+  const equipo7 = new Luminico(nombre="equipoLuminico3",nivelDeEnergiaBase=100,nivelRadacionCapturada=3000,entrenador=entrenador5,cristalesSolares=["cristal4","cristal5"],tecnologiasComplementarias=[tecnologia3,tecnologia5])
+  const equipo8 = new Eterico(nombre="equipoEterico",nivelDeEnergiaBase=100,nivelFluctacionDimensional=80,entrenador=entrenador5,cantPortalesEnergeticos=3,tecnologiasComplementarias=[tecnologia1,tecnologia2])
+  const equipo9 = new Eterico(nombre="equipoEterico2",nivelDeEnergiaBase=100,nivelFluctacionDimensional=90,entrenador=entrenador5,cantPortalesEnergeticos=5,tecnologiasComplementarias=[tecnologia1,tecnologia2,tecnologia4])
+  const equipo10 = new Eterico(nombre="equipoEterico3",nivelDeEnergiaBase=100,nivelFluctacionDimensional=50,entrenador=entrenador5,cantPortalesEnergeticos=1,tecnologiasComplementarias=[tecnologia1,tecnologia2,tecnologia4])
+
+  const entrenador3 = new Entrenador(cantCiclosSolares=12,estaEnSintoniaConElEquipo=true,nivelPrecisionEstrategica=90,rol=estrategaCuantico)
+  const entrenador4 = new Entrenador(cantCiclosSolares=11,estaEnSintoniaConElEquipo=false,nivelPrecisionEstrategica=80,rol=arquitectoDeEnergia)
+  const entrenador5 =new Entrenador(cantCiclosSolares=11,estaEnSintoniaConElEquipo=true,nivelPrecisionEstrategica=60,rol=guiaMental)
+
+
+
+  test "Un entrenador no puede tener tener un rol distinto a los autorizados por la FOZ." {
+    assert.throwsExceptionWithMessage("Rol no homologado por la FOZ", {new Entrenador(cantCiclosSolares=5,estaEnSintoniaConElEquipo=true,nivelPrecisionEstrategica=60,rol="master")})
+  }
+  test "Un equipo lumínico con radiación > 5000 y sin tecnologías activas → su energía total es su energía base." {
+    assert.equals(100, equipo1.calcularEnergiaTotal())
+  }
+  test "Un equipo lumínico con radiación < 5000 → obtiene el bono del 10%." {
+    assert.equals(110, equipo2.calcularEnergiaTotal())
+  }
+  test "Un equipo sintético con 6 módulos → aplica correctamente la penalización del 20%" {
+    assert.equals(80, equipo3.calcularEnergiaTotal())
+  }
+  test "Estratega cuántico con 12 ciclos y precisión 90 → es de élite galáctica." {
+    assert.that(entrenador3.esEliteGalactico())
+  }
+  test "Arquitecto de energía con 11 ciclos pero sin sintonía → no es de élite." {
+    assert.notThat(entrenador4.esEliteGalactico())
+  }
+  test "Guía mental con 15 ciclos → siempre es de élite." {
+    assert.that(entrenador5.esEliteGalactico())
+  }
+  test "Equipo lumínico con 3 cristales, entrenador de élite y una tecnología activa → es de prestigio universal." {
+    assert.that(equipo4.esDePrestigioUniversal())
+  }
+  test "Equipo sintético certificado con 4 módulos y todas las tecnologías activas → es de prestigio." {
+    assert.that(equipo5.esDePrestigioUniversal())
+  }
+  test "Equipo sintético certificado con 4 módulos y tiene una tecnología desactivada → no es de prestigio." {
+    assert.notThat(equipo6.esDePrestigioUniversal())
+  }
+  test "Equipo lumínico con 2 cristales, entrenador de élite y ninguna tecnología activa → es de prestigio universal." {
+    assert.notThat(equipo7.esDePrestigioUniversal())
+  }
+  test "Equipo etérico con 3 portales, fluctuación 80 y 2 tecnologías activas → es de prestigio universal." {
+    assert.that(equipo8.esDePrestigioUniversal())
+  }
+  test "Verificar que el incremento del 15% se aplica correctamente." {
+    assert.equals(161, equipo9.calcularEnergiaTotal())
+  }
+  test "Verificar que un equipo etérico que no cumple las condiciones no suma el 15%." {
+    assert.notThat(equipo10.esDePrestigioUniversal())
+    assert.equals(140, equipo10.calcularEnergiaTotal())
+  }
+}
